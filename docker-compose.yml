@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: gamecontroller
+      POSTGRES_USER: gamecontroller
+      POSTGRES_PASSWORD: gamecontroller
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  game-controller-service:
+    build: .
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/gamecontroller
+      DB_USER: gamecontroller
+      DB_PASSWORD: gamecontroller
+      BANK_SERVICE_URL: http://localhost:8084
+      GAME_ENGINE_SERVICE_URL: http://localhost:8083
+      AUTH_SERVICE_JWKS_URL: http://localhost:8081/.well-known/jwks.json
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
