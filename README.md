@@ -6,7 +6,7 @@ Pure orchestration layer: validate JWT → reserve bet (Bank) → compute spin r
 
 Part of the re-architecture of `slot-central-server-express-rmq` (Node.js/Express EGM slot-floor monolith) into Spring Boot microservices.
 
-- **Spring Boot 3.3.x**, Java 21, Gradle
+- **Spring Boot 3.3.x**, Java 21, Maven
 - **Postgres** (Spring Data JPA + Flyway)
 - **Resilience4j** circuit breakers + retries on all downstream calls
 - **Spring Security** OAuth2 resource-server (JWT validated against Auth Service JWKS)
@@ -297,7 +297,7 @@ The original Node.js monolith (`gameController.js`) had two notable bugs that ar
 
 ```bash
 docker-compose up -d postgres
-./gradlew bootRun
+mvn spring-boot:run
 ```
 
 > Downstream services (Bank, Game Engine) are not yet built. The service will start, but spin calls will fail with 502 until those services exist.
@@ -311,9 +311,9 @@ docker-compose up --build
 ### Build & Test
 
 ```bash
-./gradlew build          # compile + all tests
-./gradlew test           # tests only
-./gradlew bootJar        # produce runnable JAR
+mvn clean install       # compile + all tests
+mvn test                # tests only
+mvn package             # produce runnable JAR
 ```
 
 ---
